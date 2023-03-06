@@ -81,6 +81,7 @@ local Area = ''
 local Client = require(game.ReplicatedStorage.Library.Client)
 local Library = require(game.ReplicatedStorage.Library)
 local Orbs = getsenv(game.Players.LocalPlayer.PlayerScripts.Scripts.Game.Orbs)
+local LocalPlayerHRP = nil
 
 debug.setupvalue(Client.Network.Invoke, 1, function() return true end)
 debug.setupvalue(Client.Network.Fire, 1, function() return true end)
@@ -121,6 +122,19 @@ BeginFarm.MouseButton1Down:connect(function()
 	workspace.__THINGS.Orbs.ChildAdded:Connect(function(v)
 		Orbs.Collect(v)
 	end)
+	
+	for _,v in pairs(workspace["__THINGS"].Lootbags:GetChildren()) do
+		if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+			LocalPlayerHRP = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+			v.Position = LocalPlayerHRP.Position
+		end
+	end
+	workspace.__THINGS.Lootbags.ChildAdded:Connect(function(v)
+		if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+			LocalPlayerHRP = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+			v.Position = LocalPlayerHRP.Position
+		end
+	end)
 	while true do 
 		if AutoFarm then
 			local Pets = GetPets()
@@ -129,7 +143,7 @@ BeginFarm.MouseButton1Down:connect(function()
 				if workspace.__THINGS.Coins:FindFirstChild(i) and AutoFarm then 
 					for _,Pet in next, Pets do 
 						spawn(function()
-							wait(5)
+							wait(.15)
 							if AutoFarm then
 								Client.Network.Invoke('Join Coin', i, {Pet.uid})
 								Client.Network.Fire('Farm Coin', i, Pet.uid)
