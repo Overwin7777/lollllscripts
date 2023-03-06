@@ -129,7 +129,7 @@ BeginFarm.MouseButton1Down:connect(function()
 				if workspace.__THINGS.Coins:FindFirstChild(i) and AutoFarm then 
 					for _,Pet in next, Pets do 
 						spawn(function()
-							wait(.15)
+							wait(5)
 							if AutoFarm then
 								Client.Network.Invoke('Join Coin', i, {Pet.uid})
 								Client.Network.Fire('Farm Coin', i, Pet.uid)
